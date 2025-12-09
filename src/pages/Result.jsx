@@ -1,14 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react'; // Adicione useRef
 import { Trophy, RefreshCcw } from 'lucide-react';
 
 export default function Result({ score, totalQuestions, playerName, onRestart }) {
-  
+
+  const hasSaved = useRef(false); 
+
   useEffect(() => {
-    const history = JSON.parse(localStorage.getItem('ccbj-quiz-ranking') || '[]');
-    history.push({ name: playerName, score, date: new Date().toLocaleDateString() });
-    // Ordenar e manter top 10
+
+    if (hasSaved.current) return;
+
+    const history = JSON.parse(localStorage.getItem('quiz-ranking') || '[]');
+    
+    const newEntry = { 
+      name: playerName, 
+      score, 
+      date: new Date().toLocaleDateString('pt-BR') 
+    };
+    
+    history.push(newEntry);
+    
     const sorted = history.sort((a, b) => b.score - a.score).slice(0, 10);
-    localStorage.setItem('ccbj-quiz-ranking', JSON.stringify(sorted));
+
+    localStorage.setItem('quiz-ranking', JSON.stringify(sorted));
+    
+    hasSaved.current = true;
+    
   }, [score, playerName]);
 
   return (
@@ -20,20 +36,20 @@ export default function Result({ score, totalQuestions, playerName, onRestart })
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-3xl font-bold text-white">Parabéns, {playerName}!</h2>
+        <h2 className="text-3xl font-bold font-display text-white">Parabéns, {playerName}!</h2>
         <p className="text-slate-400">Você concluiu o Quiz de Hardware do CCBJ.</p>
       </div>
 
       <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
         <div className="text-sm text-slate-500 uppercase tracking-widest mb-2">Pontuação Final</div>
-        <div className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-          {score} <span className="text-lg text-slate-500 font-normal">pontos</span>
+        <div className="text-5xl font-black font-display text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+          {score} <span className="text-lg text-slate-500 font-normal font-sans">pontos</span>
         </div>
       </div>
 
       <button
         onClick={onRestart}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-colors"
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-blue-900/20"
       >
         <RefreshCcw size={20} />
         JOGAR NOVAMENTE

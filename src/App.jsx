@@ -1,35 +1,64 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import Layout from './components/Layout';
+import Home from './pages/Home';
+import QuizGame from './pages/QuizGame';
+import Result from './pages/Result';
+import Ranking from './pages/Ranking';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [gameState, setGameState] = useState('home');
+  const [playerName, setPlayerName] = useState('');
+  const [finalScore, setFinalScore] = useState(0);
+
+  const startGame = (name) => {
+    setPlayerName(name);
+    setGameState('playing');
+  };
+
+  const finishGame = (score) => {
+    setFinalScore(score);
+    setGameState('finished');
+  };
+
+  const restartGame = () => {
+    setGameState('home');
+    setPlayerName('');
+    setFinalScore(0);
+  };
+
+  const openRanking = () => {
+    setGameState('ranking');
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Layout>
+      {gameState === 'home' && (
+        <Home 
+          onStart={startGame} 
+          onOpenRanking={openRanking} 
+        />
+      )}
+      
+      {gameState === 'playing' && (
+        <QuizGame 
+          playerName={playerName} 
+          onFinish={finishGame} 
+        />
+      )}
+      
+      {gameState === 'finished' && (
+        <Result 
+          score={finalScore} 
+          playerName={playerName} 
+          onRestart={restartGame} 
+        />
+      )}
+
+      {gameState === 'ranking' && (
+        <Ranking onBack={() => setGameState('home')} />
+      )}
+    </Layout>
+  );
 }
 
-export default App
+export default App;

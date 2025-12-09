@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Play, Trophy, Clock, ListChecks, BarChart3 } from 'lucide-react';
 
-export default function Home({ onStart }) {
+export default function Home({ onStart, onOpenRanking }) {
   const [name, setName] = useState('');
 
   const handleStart = () => {
     if (name.trim()) {
       onStart(name);
     } else {
-      alert("Por favor, digite seu nome para o ranking!");
+      alert("Por favor, digite seu nome para iniciar!");
     }
   };
 
@@ -21,8 +21,8 @@ export default function Home({ onStart }) {
 
       {/* Título */}
       <div className="space-y-2">
-        <h1 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400">
-          Quiz de Hardware
+        <h1 className="text-5xl md:text-6xl font-black font-display text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400">
+          Quiz
         </h1>
         <p className="text-slate-400 text-lg">Ateliê de Montagem e Manutenção</p>
         <p className="text-slate-500 text-sm">Centro Cultural do Bom Jardim</p>
@@ -38,10 +38,14 @@ export default function Home({ onStart }) {
       {/* Área de Input e Botão */}
       <div className="w-full space-y-4 mt-8 bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
         <div className="text-left">
-          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">
+          <label 
+            htmlFor="player-name" 
+            className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1"
+          >
             Digite seu nome para jogar
           </label>
           <input
+            id="player-name"
             type="text"
             placeholder="Seu nome aqui..."
             className="w-full mt-2 bg-slate-900 border border-slate-700 text-white p-4 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
@@ -51,6 +55,7 @@ export default function Home({ onStart }) {
         </div>
 
         <div className="flex gap-4">
+          {/* Botão de Iniciar Quiz */}
           <button
             onClick={handleStart}
             className="flex-1 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 border border-slate-600 hover:border-blue-400 group"
@@ -59,7 +64,12 @@ export default function Home({ onStart }) {
             INICIAR QUIZ
           </button>
           
-          <button className="px-6 py-4 bg-slate-900 border border-slate-700 rounded-xl hover:bg-slate-800 text-yellow-500 transition-colors">
+          {/* Botão do Ranking*/}
+          <button 
+            onClick={onOpenRanking}
+            className="px-6 py-4 bg-slate-900 border border-slate-700 rounded-xl hover:bg-slate-800 text-yellow-500 transition-colors"
+            aria-label="Ver Ranking de Jogadores"
+          >
             <Trophy className="w-6 h-6" />
           </button>
         </div>

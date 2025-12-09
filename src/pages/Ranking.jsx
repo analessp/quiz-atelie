@@ -6,15 +6,16 @@ export default function Ranking({ onBack }) {
 
   useEffect(() => {
     // Busca os dados salvos no navegador ao carregar a tela
-    const storedRanking = JSON.parse(localStorage.getItem('ccbj-quiz-ranking') || '[]');
+    const storedRanking = JSON.parse(localStorage.getItem('quiz-ranking') || '[]');
     setRanking(storedRanking);
   }, []);
 
   // Função para limpar o histórico
   const handleClearHistory = () => {
     if (window.confirm("Tem certeza que deseja apagar todo o histórico de pontuações?")) {
-      localStorage.removeItem('quiz-atelie');
+      localStorage.removeItem('quiz-ranking');
       setRanking([]);
+      alert("Histórico apagado com sucesso!");
     }
   };
 

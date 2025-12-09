@@ -27,7 +27,6 @@ export default function QuizGame({ playerName, onFinish }) {
       const points = currentQuestion.difficulty === 'Fácil' ? 10 : currentQuestion.difficulty === 'Médio' ? 20 : 30;
       setScore((prev) => prev + points);
     }
-    // Pequeno delay para mostrar feedback visual antes de passar
     setTimeout(() => handleNext(), 1000);
   };
 
